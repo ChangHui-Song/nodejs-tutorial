@@ -1,14 +1,15 @@
 const { Worker, isMainThread, parentPort } = require('worker_threads');
 
 if (isMainThread) {
+  console.log('parent:', process.pid);
   const worker = new Worker(__filename);
-
-  worker.on('message', (value) => console.log('워커로부터', value));
-  worker.on('exit', () => console.log('워커 끝'));
+  worker.on('message', (message) => console.log('from worker', message));
+  worker.on('exit', () => console.log('worker exit'));
   worker.postMessage('ping');
 } else {
+  console.log('child:', process.pid);
   parentPort.on('message', (value) => {
-    console.log('부모로부터', value);
+    console.log('from parent', value);
     parentPort.postMessage('pong');
     parentPort.close();
   });
