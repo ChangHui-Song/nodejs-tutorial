@@ -3,6 +3,7 @@ async function getUser() {
     const res = await axios.get('/users');
     const users = res.data;
     const list = document.querySelector('#list');
+    console.log('res:', res);
     list.innerHTML = '';
     Object.keys(users).map(function (key) {
       const userDiv = document.createElement('div');

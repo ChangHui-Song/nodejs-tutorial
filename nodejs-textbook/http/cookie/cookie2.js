@@ -8,6 +8,7 @@ const parseCookies = (cookie = '') =>
     .split(';')
     .map((v) => v.split('='))
     .reduce((acc, [k, v]) => {
+      console.log(k, v);
       acc[k.trim()] = decodeURIComponent(v);
       return acc;
     }, {});
@@ -15,7 +16,8 @@ const parseCookies = (cookie = '') =>
 http
   .createServer(async (req, res) => {
     const cookies = parseCookies(req.headers.cookie);
-
+    console.log('req.url:', req.url);
+    console.log('cookie:', req.headers.cookie);
     if (req.url.startsWith('/login')) {
       const { query } = url.parse(req.url);
       const { name } = qs.parse(query);
@@ -26,23 +28,23 @@ http
         Location: '/',
         'Set-Cookie': `name=${encodeURIComponent(
           name
-        )}; expries=${expires.toGMTString()}; HttpOnly; Path=/`,
+        )}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
       });
       res.end();
     } else if (cookies.name) {
-      res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end(`${cookies.name}님 안녕하세요`);
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      return res.end(`<h1>${cookies.name}님 안녕하세요</h1>`);
     } else {
       try {
         const data = await fs.readFile('./cookie2.html');
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.end(data);
       } catch (error) {
-        res, writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end(error.message);
+        res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(error.massage);
       }
     }
   })
-  .listen(8084, () => {
-    console.log('open 8084');
+  .listen(8080, () => {
+    console.log('open 8080');
   });
