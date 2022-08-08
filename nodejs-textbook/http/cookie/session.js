@@ -1,10 +1,10 @@
 const http = require('http');
-const fs = require('fs').promises;
 const url = require('url');
+const fs = require('fs').promises;
 const qs = require('querystring');
 
-const parseCookies = (cookies = '') =>
-  cookies
+const parseCookies = (cookie = '') =>
+  cookie
     .split(';')
     .map((v) => v.split('='))
     .reduce((acc, [k, v]) => {
@@ -17,10 +17,12 @@ const session = {};
 http
   .createServer(async (req, res) => {
     const cookies = parseCookies(req.headers.cookie);
+    console.log(cookies);
     if (req.url.startsWith('/login')) {
       const { query } = url.parse(req.url);
       const { name } = qs.parse(query);
       const expires = new Date();
+
       expires.setMinutes(expires.getMinutes() + 5);
       const uniqueInt = Date.now();
       session[uniqueInt] = {
@@ -34,10 +36,10 @@ http
       res.end();
     } else if (
       cookies.session &&
-      session[cookies.session].expires > new Date()
+      session[cookies.session]?.expires > new Date()
     ) {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(`${session[cookies.session].name}님 안녕하세요`);
+      res.end(`<h1>${session[cookies.session].name}님 안녕하세요</h1>`);
     } else {
       try {
         const data = await fs.readFile('./cookie2.html');
@@ -46,9 +48,10 @@ http
       } catch (error) {
         res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end(error.message);
+        console.error(error);
       }
     }
   })
-  .listen(8085, () => {
-    console.log('open 8085');
+  .listen(8080, () => {
+    console.log('open 8080');
   });
