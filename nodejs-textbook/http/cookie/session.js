@@ -1,7 +1,6 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs').promises;
-const qs = require('querystring');
 
 const parseCookies = (cookie = '') =>
   cookie
@@ -17,12 +16,12 @@ const session = {};
 http
   .createServer(async (req, res) => {
     const cookies = parseCookies(req.headers.cookie);
-    console.log(cookies);
-    if (req.url.startsWith('/login')) {
-      const { query } = url.parse(req.url);
-      const { name } = qs.parse(query);
-      const expires = new Date();
 
+    if (req.url.startsWith('/login')) {
+      const userInfo = new url.URLSearchParams(req.url.split('?')[1]);
+      const name = userInfo.get('name');
+
+      const expires = new Date();
       expires.setMinutes(expires.getMinutes() + 5);
       const uniqueInt = Date.now();
       session[uniqueInt] = {
