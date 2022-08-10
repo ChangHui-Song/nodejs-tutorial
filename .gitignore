@@ -2,3 +2,4 @@ node_modules/
 example/
 test.js
 *.txt
+.env
