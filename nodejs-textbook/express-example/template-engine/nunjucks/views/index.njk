@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    {% include "header.njk" %}
+    <p>Welcome to {{title}}</p>
+    <ul>
+      {% set fruits = ['사과', '배', '오렌지', '바나나', '복숭아'] %}
+      {% for item in fruits %}
+      {% if loop.index % 2 %}
+      <li>홀수번 째 {{item}}</li>
+      {% else %}
+      <li>짝수번 째 {{item}}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% include "footer.njk" %}
+  </body>
+</html>
