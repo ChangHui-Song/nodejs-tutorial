@@ -8,6 +8,7 @@ const path = require('path');
 dotenv.config();
 const app = express();
 app.set('port', process.env.PORT || 3000);
+const aboutRouter = require('./routes/about');
 
 app.use(morgan('dev'));
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -26,12 +27,15 @@ app.use(
   })
 );
 
-app.get('/about', (req, res) => {
-  res.send('<h1>This is About Page</h1>');
-});
+app.use('/about', aboutRouter);
 
 app.get('/category/:name', (req, res) => {
   res.send('<h1>Hello Wildcard</h1>');
+});
+
+app.use((req, res, next) => {
+  res.status(404).send('404 NOT FOUND');
+  next();
 });
 
 app.use((err, req, res, next) => {
