@@ -3,7 +3,6 @@ const path = require('path');
 const morgan = require('morgan');
 
 const { sequelize } = require('./models');
-const { nextTick } = require('process');
 
 const app = express();
 app.set(app.get(process.env.PORT) || 3000);
