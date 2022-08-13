@@ -1,3 +1,7 @@
+example/
+test.js
+*.txt
+config/
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
@@ -143,7 +147,5 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
-# User
-example/
-test.js
-*.txt
+
+
