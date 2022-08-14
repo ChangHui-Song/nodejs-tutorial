@@ -21,7 +21,7 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.TEXT,
           allowNull: true,
         },
-        create_at: {
+        created_at: {
           type: Sequelize.DATE,
           allowNull: false,
           defaultValue: Sequelize.NOW,
@@ -31,8 +31,8 @@ module.exports = class User extends Sequelize.Model {
         sequelize,
         timestamps: false,
         underscored: false,
-        modelname: 'User',
-        talbename: 'users',
+        modelName: 'User',
+        tableName: 'users',
         paranoid: false,
         charset: 'utf8',
         collate: 'utf8_general_ci',
@@ -40,6 +40,6 @@ module.exports = class User extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.User.hasMany(db.Commnet, { foreignKey: 'commenter', sourceKey: 'id' });
+    db.User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id' });
   }
 };
