@@ -1,0 +1,58 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title '몽구스 서버'
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    div
+      form#user-form
+        fieldset
+          legend "add user"
+          div
+            input#username(type="text", placeholder="이름")
+          div
+            input#age(type="number", placeholder="나이")
+          div
+            input#married(type="checkbox")
+            label(for="married") '결혼 여부'
+          button(type="submit") '등록'
+    br
+    table#user-list
+      thead 
+        tr
+          td '아이디'
+          td '이름'
+          td '나이'
+          td '결혼 여부'
+      tbody 
+        each user in users
+          tr
+            td #{user.id}
+            td #{user.name}
+            td #{user.age}
+            if user.married
+              td '기혼'
+            else
+              td '미혼'
+    br
+    div
+      form#comment-form
+        fieldset
+          legend '댓글 등록'
+          div 
+            input#userid(type="text" placeholder="사용자 아이디") 
+            input#comment(type="text" placeholder="댓글") 
+            button(type="submit") '등록'
+    br
+    table#comment-list
+      thead
+        tr
+          th '아이디'
+          th '작성자'
+          th '댓글'
+          th '수정'
+          th '삭제'
+      tbody
+    script(src="https://unpkg.com/axios/dist/axios.min.js")
+    script(src="/mongoose.js") 

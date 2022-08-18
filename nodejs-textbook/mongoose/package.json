@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "npm start": "npx nodemon app"
+    "start": "npx nodemon app"
   },
   "author": "",
   "license": "MIT",
