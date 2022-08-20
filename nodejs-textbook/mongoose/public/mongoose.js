@@ -39,6 +39,10 @@ async function getUser() {
 
 async function getComment(id) {
   try {
+    if (!id) {
+      alert('존재하지 않는 아이디입니다.');
+      return;
+    }
     const res = await axios.get(`/users/${id}/comments`);
     const comments = res.data;
     const tbody = document.querySelector('#comment-list tbody');
