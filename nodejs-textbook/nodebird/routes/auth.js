@@ -51,10 +51,10 @@ router.get('/logout', isLoggedIn, (req, res) => {
   req.logout((err) => {
     req.session.destroy();
     if (err) {
-      res.redirect('/');
-    } else {
-      res.status(200).redirect('/');
+      console.error(err);
+      return res.redirect('/');
     }
+    res.status(200).redirect('/');
   });
 });
 
