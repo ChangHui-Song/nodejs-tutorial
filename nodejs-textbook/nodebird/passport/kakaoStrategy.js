@@ -1,7 +1,7 @@
 'use strict';
 
 const passport = require('passport');
-const KakaoStrategy = require('passport-kakao');
+const KakaoStrategy = require('passport-kakao').Strategy;
 
 const User = require('../models/user');
 
@@ -19,16 +19,15 @@ module.exports = () => {
             where: { snsId: profile.id, provider: 'kakao' },
           });
           if (exUser) {
-            done(null, exUser);
-          } else {
-            const newUser = await User.create({
-              email: profile._json && profile._json.kakao_account_email,
-              nick: profile.displayName,
-              snsId: profile.id,
-              provider: 'kakao',
-            });
-            done(null, newUser);
+            return done(null, exUser);
           }
+          const newUser = await User.create({
+            email: profile._json && profile._json.kakao_account_email,
+            nick: profile.displayName,
+            snsId: profile.id,
+            provider: 'kakao',
+          });
+          return done(null, newUser);
         } catch (err) {
           console.log(err);
           done(err);
