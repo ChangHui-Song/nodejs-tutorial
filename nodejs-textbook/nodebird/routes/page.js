@@ -54,7 +54,14 @@ router.get('/hashtag', async (req, res, next) => {
     });
     let posts = [];
     if (hashtag) {
-      posts = await hashtag.getPosts({ include: [{ model: User }] });
+      posts = await hashtag.getPosts({
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'nick'],
+          },
+        ],
+      });
     }
 
     return res.render('main', {
