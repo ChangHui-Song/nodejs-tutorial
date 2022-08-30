@@ -22,7 +22,6 @@
     btn.addEventListener('click', () => {
       const userNick =
         btn.parentNode.querySelector('.following-nick').textContent;
-      console.log(userNick);
       if (confirm('팔로우를 취소하시겠습니까?')) {
         axios
           .post(`/user/${userNick}/unfollow`)

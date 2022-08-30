@@ -24,6 +24,7 @@
           <input id="my-id" type="hidden" value="{{user.id}}" />
           <a id="home" href="/" class="btn">HOME</a>
           <a id="my-profile" href="/profile" class="btn">내 프로필</a>
+          <button id="change-nick" class="btn">닉네임 변경</button>
           <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
           {% else %}
           <form id="login-form" action="/auth/login" method="post">
@@ -51,6 +52,18 @@
         if (new URL(location.href).searchParams.get('loginError')) {
           alert(new URL(location.href).searchParams.get('loginError'));
         }
+
+        document.querySelector('#change-nick').addEventListener('click', () => {
+          const newNickName = prompt('변경 할 닉네임을 입력해주세요.');
+          if (newNickName) {
+            axios
+              .post(`/user/profile/${newNickName}`)
+              .than(location.reload())
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        });
       };
     </script>
     {% block script %} {% endblock %}

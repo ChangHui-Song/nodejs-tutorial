@@ -34,4 +34,18 @@ router.post('/:nick/unfollow', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post('/profile/:newNick', async (req, res, next) => {
+  try {
+    await User.update(
+      { nick: req.params.newNick },
+      { where: { id: req.user.id } }
+    );
+    console.log(req.user.nick);
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;
