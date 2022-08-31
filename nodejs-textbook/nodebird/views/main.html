@@ -43,6 +43,7 @@
       user.id %}
       <button class="twit-follow">팔로우하기</button>
       {% endif %}
+      <button class="like">좋아요</button>
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일" /></div>
@@ -88,6 +89,11 @@
           }
         }
       }
+    });
+  });
+  document.querySelectorAll('.like').forEach((button) => {
+    button.addEventListener('click', () => {
+      const myId = button.parentNode.querySelector('.twit-user-id');
     });
   });
 </script>

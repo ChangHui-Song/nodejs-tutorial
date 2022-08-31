@@ -26,16 +26,24 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const posts = await Post.findAll({
-      include: {
+    const posts = await Post.findAll(
+      {
+        include: {
+          model: User,
+          attributes: ['id', 'nick'],
+        },
+        order: [['createdAt', 'DESC']],
+      },
+      {
         model: User,
         attributes: ['id', 'nick'],
-      },
-      order: [['createdAt', 'DESC']],
-    });
+        as: 'Liker',
+      }
+    );
     res.render('main', {
       title: 'NodeBird',
       twits: posts,
+      user: req.user,
     });
   } catch (err) {
     console.error(err);
