@@ -42,11 +42,12 @@
       {% if not followerIdList.includes(twit.User.id) and twit.User.id !==
       user.id %}
       <button class="twit-follow">팔로우하기</button>
-      {% endif %} {% if not twit.Liker.includes(twit.User.id) and twit.User.id
-      !== user.id %}
+      {% endif %} {% set Likers = []%} {% for item in twit.Liker %} {% set
+      Likers = (Likers.push(item.id), Likers) %} {% endfor %} {% if not
+      Likers.includes(user.id) and twit.User.id !== user.id and user %}
       <button class="like">좋아요</button>
-      {% elif twit.Liker.includes(twit.User.id) and twit.User.id !== user.id %}
-      <button class="like">좋아요 취소</button>
+      {% elif Likers.includes(user.id) and twit.User.id !== user.id and user %}
+      <button class="unlike">좋아요 취소</button>
       {% endif %}
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
@@ -100,6 +101,19 @@
       const userId = tag.parentNode.querySelector('.twit-id').value;
       axios
         .post(`/post/${userId}/like`)
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    });
+  });
+  document.querySelectorAll('.unlike').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const userId = tag.parentNode.querySelector('.twit-id').value;
+      axios
+        .post(`/post/${userId}/unlike`)
         .then(() => {
           location.reload();
         })

@@ -62,11 +62,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 
 router.post('/:id/like', isLoggedIn, async (req, res, next) => {
   try {
-    console.log('--------------------------');
-    console.log('req.params.id', req.params.id);
-    console.log('--------------------------');
     const post = await Post.findOne({ where: { id: req.params.id } });
-    console.log(post);
     await post.addLiker(req.user.id);
     res.redirect('/');
   } catch (error) {
@@ -75,9 +71,9 @@ router.post('/:id/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
+router.post('/:id/unlike', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await Post.findOne({ id: req.params.id });
+    const post = await Post.findOne({ where: { id: req.params.id } });
     await post.removeLiker(req.user.id);
     res.redirect('/');
   } catch (error) {
