@@ -71,11 +71,11 @@ router.post('/:id/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post('/:id/unlike', isLoggedIn, async (req, res, next) => {
+router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({ where: { id: req.params.id } });
     await post.removeLiker(req.user.id);
-    res.redirect('/');
+    res.redirect(303, '/');
   } catch (error) {
     console.error(error);
     next(error);

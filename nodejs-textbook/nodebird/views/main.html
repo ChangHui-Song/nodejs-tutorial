@@ -115,7 +115,7 @@
     tag.addEventListener('click', function () {
       const twitId = tag.parentNode.querySelector('.twit-id').value;
       axios
-        .post(`/post/${twitId}/unlike`)
+        .delete(`/post/${twitId}/like`)
         .then(() => {
           location.reload();
         })
