@@ -19,7 +19,7 @@ module.exports = () => {
           if (!exUser) {
             return done(null, false, { message: 'no user' });
           }
-          const result = await bcrypt.compare(password, exUser.passport);
+          const result = await bcrypt.compare(password, exUser.password);
           if (result) {
             return done(null, exUser);
           }
