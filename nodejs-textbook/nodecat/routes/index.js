@@ -9,7 +9,7 @@ router.get('/test', async (req, res, next) => {
       const tokenResult = await axios.post('http://localhost:8002/v1/token', {
         clientSecret: process.env.CLIENT_SECRET,
       });
-      if (!tokenResult.data || !(tokenResult.data.code !== 200)) {
+      if (!(tokenResult.data || tokenResult.data.code !== 200)) {
         return res.json(tokenResult.data);
       }
       req.session.jwt = tokenResult.data.token;
