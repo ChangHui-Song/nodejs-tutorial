@@ -31,7 +31,7 @@ router.post('/token', async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expriesIn: '1m',
+        expiresIn: '1m',
         issuer: 'nodebird',
       }
     );
@@ -49,7 +49,7 @@ router.post('/token', async (req, res) => {
   }
 });
 
-router.get('/test', (req, res, next) => {
+router.get('/test', verifyToken, (req, res, next) => {
   res.json(req.body.decoded);
 });
 
