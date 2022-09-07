@@ -37,3 +37,14 @@ exports.verifyToken = (req, res, next) => {
     });
   }
 };
+
+exports.apiLimiter = RateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  handler(req, res) {
+    res.status(thos.statusCode).json({
+      code: this.statusCode,
+      message: '1분에 한 번만 요청 가능',
+    });
+  },
+});
