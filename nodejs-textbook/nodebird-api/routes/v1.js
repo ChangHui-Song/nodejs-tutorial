@@ -9,8 +9,8 @@ const { Domain, User } = require('../models');
 const router = express.Router();
 
 router.post('/token', async (req, res) => {
-  console.log(req.body);
   const { clientSecret } = req.body;
+  console.log(clientSecret);
   try {
     const domain = await Domain.findOne({
       where: { clientSecret },
@@ -32,7 +32,7 @@ router.post('/token', async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: '30s',
+        expiresIn: '1m',
         issuer: 'nodebird',
       }
     );
