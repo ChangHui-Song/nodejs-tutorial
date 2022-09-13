@@ -17,7 +17,7 @@ const app = express();
 passportConfig();
 app.set('port', process.env.PORT || 8002);
 app.set('view engine', 'html');
-nunjucks.config('views', {
+nunjucks.configure('views', {
   express: app,
   watch: true,
 });
@@ -59,8 +59,8 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.rocals.message = err.message;
-  res.rocals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
   res.status(err.status || 500);
   res.render('error');
 });
