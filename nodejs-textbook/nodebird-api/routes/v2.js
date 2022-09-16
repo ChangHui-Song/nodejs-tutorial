@@ -115,4 +115,64 @@ router.get(
   }
 );
 
+router.get('/user/followers', verifyToken, apiLimiter, async (req, res) => {
+  const user = await User.findOne({
+    where: { id: req.decoded.id },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followers',
+      },
+    ],
+  });
+  if (!user) {
+    return res.json({
+      code: 404,
+      message: 'user not found',
+    });
+  }
+  const followers = user.Followers.map((f) => f.nick);
+  if (!followers) {
+    return res.json({
+      code: 404,
+      message: 'you have not followers',
+    });
+  }
+  res.json({
+    code: 200,
+    payload: followers,
+  });
+});
+
+router.get('/user/followings', verifyToken, apiLimiter, async (req, res) => {
+  const user = await User.findOne({
+    where: { id: req.decoded.id },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followings',
+      },
+    ],
+  });
+  if (!user) {
+    return res.json({
+      code: 404,
+      message: 'user not found',
+    });
+  }
+  const followings = user.Followings.map((f) => f.nick);
+  if (Array.isArray(followings) && followings.length === 0) {
+    return res.json({
+      code: 404,
+      message: 'you have not followings',
+    });
+  }
+  res.json({
+    code: 200,
+    payload: followings,
+  });
+});
+
 module.exports = router;
