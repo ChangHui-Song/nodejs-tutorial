@@ -45,7 +45,7 @@ router.post('/token', apiLimiter, async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: '30m',
+        expiresIn: '1m',
         issuer: 'nodebird',
       }
     );
