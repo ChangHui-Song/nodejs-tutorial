@@ -73,7 +73,7 @@ router.get('/myFollowers', async (req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-  res.render('main', { key: process.env.CLIENT_SECRET });
+  res.render('main', { key: process.env.FRONT_SECRET });
 });
 
 router.get('/test', async (req, res, next) => {

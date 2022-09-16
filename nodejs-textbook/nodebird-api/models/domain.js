@@ -18,6 +18,10 @@ module.exports = class Domain extends Sequelize.Model {
           type: Sequelize.UUID,
           allowNull: false,
         },
+        frontSecret: {
+          type: Sequelize.UUID,
+          allowNull: false,
+        },
       },
       {
         sequelize,

@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
   const domain = await Domain.findOne({
-    where: { host: req.get('origin') },
+    where: { host: url.parse(req.get('origin'))?.host },
   });
   if (domain) {
     cors({
@@ -28,7 +28,7 @@ router.use(async (req, res, next) => {
 
 router.use(async (req, res, next) => {
   const domain = await Domain.findOne({
-    where: { host: req.get('origin') },
+    where: { host: url.parse(req.get('origin'))?.host },
   });
   if (domain.type === 'premium') {
     apiLimiterPremium(req, res, next);
@@ -47,6 +47,7 @@ router.post('/token', async (req, res) => {
         attributes: ['nick', 'id'],
       },
     });
+    console.log(domain);
     if (!domain) {
       return res.status(401).json({
         code: 401,

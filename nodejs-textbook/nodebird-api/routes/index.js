@@ -23,11 +23,16 @@ router.get('/', async (req, res, next) => {
 
 router.post('/domain', isLoggedIn, async (req, res, next) => {
   try {
+    console.log('---------------------------');
+    console.log(req.body);
+    console.log(req.body.type);
+    console.log('---------------------------');
     await Domain.create({
       UserId: req.user.id,
       host: req.body.host,
       type: req.body.type,
       clientSecret: uuidv4(),
+      frontSecret: uuidv4(),
     });
     res.redirect('/');
   } catch (error) {
