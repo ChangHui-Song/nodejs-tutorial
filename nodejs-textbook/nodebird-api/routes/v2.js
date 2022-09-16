@@ -3,7 +3,11 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const url = require('url');
 
-const { verifyToken, apiLimiter } = require('./middlewares');
+const {
+  verifyToken,
+  apiLimiterFree,
+  apiLimiterPremium,
+} = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
@@ -22,7 +26,18 @@ router.use(async (req, res, next) => {
   }
 });
 
-router.post('/token', apiLimiter, async (req, res) => {
+router.use(async (req, res, next) => {
+  const domain = await Domain.findOne({
+    where: { host: req.get('origin') },
+  });
+  if (domain.type === 'premium') {
+    apiLimiterPremium(req, res, next);
+  } else {
+    apiLimiterFree(req, res, next);
+  }
+});
+
+router.post('/token', async (req, res) => {
   const { clientSecret } = req.body;
   try {
     const domain = await Domain.findOne({
@@ -63,11 +78,12 @@ router.post('/token', apiLimiter, async (req, res) => {
   }
 });
 
-router.get('/test', verifyToken, apiLimiter, (req, res) => {
+router.get('/test', verifyToken, (req, res) => {
+  console.log(req.decoded);
   res.json(req.decoded);
 });
 
-router.get('/posts/my', verifyToken, apiLimiter, async (req, res) => {
+router.get('/posts/my', verifyToken, async (req, res) => {
   Post.findAll({ where: { userId: req.decoded.id } })
     .then((posts) => {
       console.log(posts);
@@ -85,37 +101,32 @@ router.get('/posts/my', verifyToken, apiLimiter, async (req, res) => {
     });
 });
 
-router.get(
-  '/posts/hashtag/:title',
-  verifyToken,
-  apiLimiter,
-  async (req, res) => {
-    try {
-      const hashtag = await Hashtag.findOne({
-        where: { title: req.params.title },
-      });
-      if (!hashtag) {
-        return res.status(404).json({
-          code: 404,
-          message: '검색 결과가 없습니다.',
-        });
-      }
-      const posts = hashtag.getPosts();
-      return res.json({
-        code: 200,
-        payload: posts,
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        code: 500,
-        message: '서버 에러',
+router.get('/posts/hashtag/:title', verifyToken, async (req, res) => {
+  try {
+    const hashtag = await Hashtag.findOne({
+      where: { title: req.params.title },
+    });
+    if (!hashtag) {
+      return res.status(404).json({
+        code: 404,
+        message: '검색 결과가 없습니다.',
       });
     }
+    const posts = hashtag.getPosts();
+    return res.json({
+      code: 200,
+      payload: posts,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      code: 500,
+      message: '서버 에러',
+    });
   }
-);
+});
 
-router.get('/user/followers', verifyToken, apiLimiter, async (req, res) => {
+router.get('/user/followers', verifyToken, async (req, res) => {
   const user = await User.findOne({
     where: { id: req.decoded.id },
     include: [
@@ -145,7 +156,7 @@ router.get('/user/followers', verifyToken, apiLimiter, async (req, res) => {
   });
 });
 
-router.get('/user/followings', verifyToken, apiLimiter, async (req, res) => {
+router.get('/user/followings', verifyToken, async (req, res) => {
   const user = await User.findOne({
     where: { id: req.decoded.id },
     include: [
