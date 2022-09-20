@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon app",
+    "start": "npx nodemon server",
     "test": "jest"
   },
   "author": "",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "jest": "^29.0.3",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4"
   }
 }
