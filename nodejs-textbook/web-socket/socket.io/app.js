@@ -1,8 +1,8 @@
 const express = require('express');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 
@@ -38,7 +38,7 @@ app.use(
 app.use('/', indexRouter);
 
 app.use((req, res, next) => {
-  const error = new Error(`${req.method} ${req.url} not found router`);
+  const error = new Error(`${req.method} ${req.url} not found`);
   error.status = 404;
   next(error);
 });
@@ -51,7 +51,7 @@ app.use((err, req, res, next) => {
 });
 
 const server = app.listen(app.get('port'), () => {
-  console.log(`${app.get('port')} port open`);
+  console.log(`${app.get('port')} connected`);
 });
 
 webSocket(server);
