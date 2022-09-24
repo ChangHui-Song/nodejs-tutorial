@@ -21,7 +21,7 @@
         <td>{{room.max}}</td>
         <td>{{room.owner}}</td>
         <td>
-          <button data-password="{{'true' if room.password else 'false'}}" data-id="room.id"
+          <button data-password="{{'true' if room.password else 'false'}}" data-id="room._id"
             class="join-btn">입장</button>
         </td>
       </tr>
@@ -53,32 +53,33 @@
     const button = documnet.createElement('button');
     button.textContent = '입장';
     button.dataset.password = data.password ? 'true' : 'false';
-    button.data.id = data._id;
+    button.dataset.id = data._id;
     button.addEventListener('click', addBtnEvent);
     td.appendChild(button);
+    tr.appendChild(td);
     tr.dataset.id = data._id;
     document.querySelector('table tbody').appendChild(tr);
+  });
 
-    socket.on('removeRoom', function (data) {
-      document.querySelectorAll('tbody tr').forEach(function (tr) {
-        if (tr.dataset.id === data) {
-          tr.parentNode.removeChild(tr);
-        }
-      });
-    });
-
-    function addBtnEvent(e) {
-      if (e.target.dataset.password === 'true') {
-        const password = prompt('비밀번호를 입력하세요.');
-        location.href = '/room/' + e.target.dataset.id + '?password=' + password;
-      } else {
-        location.href = '/room/' + e.target.dataset.id;
+  socket.on('removeRoom', function (data) {
+    document.querySelectorAll('tbody tr').forEach(function (tr) {
+      if (tr.dataset.id === data) {
+        tr.parentNode.removeChild(tr);
       }
-    }
-
-    document.querySelectorAll('.join-btn').forEach(function (btn) {
-      btn.addEventListener('click', addBtnEvent);
     });
+  });
+
+  function addBtnEvent(e) {
+    if (e.target.dataset.password === 'true') {
+      const password = prompt('비밀번호를 입력하세요.');
+      location.href = '/room/' + e.target.dataset.id + '?password=' + password;
+    } else {
+      location.href = '/room/' + e.target.dataset.id;
+    }
+  }
+
+  document.querySelectorAll('.join-btn').forEach(function (btn) {
+    btn.addEventListener('click', addBtnEvent);
   });
 </script>
 {% endblock %}
