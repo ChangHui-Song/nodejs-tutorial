@@ -11,7 +11,13 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   try {
     const rooms = await Room.find({});
-    res.render('main', { rooms, title: 'chatting' });
+    const io = req.app.get('io');
+
+    res.render('main', {
+      rooms,
+      title: 'chatting',
+      roomData: io.of('/chat').adapter.rooms,
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -101,7 +107,7 @@ router.post('/room/:id/chat', async (req, res, next) => {
 });
 
 try {
-  fs.readFileSync('uploads');
+  fs.readdirSync('uploads');
 } catch (error) {
   console.error('not fond uploads folder, creating uploads folder');
   fs.mkdirSync('uploads');

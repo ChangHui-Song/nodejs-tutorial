@@ -18,7 +18,7 @@
       <tr data-id="{{room._id}}">
         <td>{{room.title}}</td>
         <td>{{'비밀방' if room.password else '공개방'}}</td>
-        <td>{{room.max}}</td>
+        <td>{{roomData[room._id].length}}/{{room.max}}</td>
         <td>{{room.owner}}</td>
         <td>
           <button data-password="{{'true' if room.password else 'false'}}" data-id="{{room._id}}"
