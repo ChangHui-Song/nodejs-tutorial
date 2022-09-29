@@ -25,4 +25,8 @@ User.init(sequelize);
 Good.init(sequelize);
 Auction.init(sequelize);
 
+User.associate(db);
+Good.associate(db);
+Auction.associate(db);
+
 module.exports = db;

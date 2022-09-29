@@ -12,7 +12,7 @@ module.exports = () => {
       },
       async (email, password, done) => {
         try {
-          const exUser = await User.findOne({ where: email });
+          const exUser = await User.findOne({ where: { email } });
           if (!exUser) {
             return done(null, false, { message: 'not a registered user' });
           }

@@ -10,7 +10,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const { sequlize, sequelize } = require('./models');
+const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 
 const app = express();
@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 app.use(passport.initialize());
-app.use(passport.session);
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
