@@ -12,6 +12,8 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
+const sse = require('./sse');
+const webSocket = require('./socket');
 
 const app = express();
 passportConfig();
@@ -66,6 +68,9 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
   console.log(`opened ${app.get('port')}`);
 });
+
+webSocket(server, app);
+sse(server);
