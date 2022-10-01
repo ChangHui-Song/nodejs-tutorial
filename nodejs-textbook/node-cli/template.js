@@ -1,16 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const readline = require('readline');
 
 let rl;
-const fs = require('fs');
-const path = require('path');
-
-const type = process.argv[2];
-const name = process.argv[3];
-const directory = process.argv[4];
+let type = process.argv[2];
+let name = process.argv[3];
+let directory = process.argv[4];
 const htmlTemplate = `
 <!DOCTYPE html>
 <html>
@@ -24,7 +21,6 @@ const htmlTemplate = `
   </body>
 </html>
 `;
-
 const routerTemplate = `
 const express = require('express');
 
