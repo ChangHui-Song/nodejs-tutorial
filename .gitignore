@@ -2,7 +2,7 @@
 example/
 test.js
 *.txt
-config/
+package-lock.json/
 uploads/
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
