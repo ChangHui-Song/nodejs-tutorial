@@ -1,0 +1,78 @@
+components:
+  schemas:
+    Board:
+      type: object
+      properties:
+        writer:
+          type: string
+          example: gigo96
+        title:
+          type: string
+          example: title example
+        content:
+          type: string
+          example: content example
+    Token:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: '01012341234'
+
+/boards:
+  get:
+    tags: [Board]
+    summary: 게시글 가져오기
+    parameters:
+      - in: query
+        name: number
+        schema:
+          type: int
+    description: boards description
+    responses:
+      200:
+        description: success
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  number:
+                    type: integer
+                    example: 1
+                  writer:
+                    type: string
+                    example: gigo96
+                  title:
+                    type: string
+                    example: gigo96 title
+                  content:
+                    type: string
+                    example: gigo96 content
+  post:
+    tags: [Board]
+    summary: 게시글 작성 요청
+    requestBody:
+      require: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Board'
+    responses:
+      '201':
+        description: Created
+
+/tokens/phone:
+  post:
+    tags: [Token]
+    summary: SMS 전송
+    requestBody:
+      require: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Token'
+    responses:
+      '201':
+        description: Send SMS to phone
