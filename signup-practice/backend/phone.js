@@ -1,3 +1,6 @@
+import coolsms from 'coolsms-node-sdk';
+import 'dotenv/config';
+
 export function checkValidationPhone(phoneNumber) {
   if (phoneNumber.length !== 11 && phoneNumber.length !== 10) {
     return false;
@@ -25,7 +28,18 @@ export function getToken() {
   return String(Math.floor(Math.random() * 10 ** count)).padStart(count, '0');
 }
 
-export function sendTokenToSMS(phoneNumber, token) {
-  console.log('Send SMS to your phone');
-  return true;
+export async function sendTokenToSMS(phoneNumber, token) {
+  const mysms = coolsms.default;
+
+  const messageService = new mysms(
+    process.env.SMS_API_KEY,
+    process.env.SMS_API_SECRET
+  );
+  const result = await messageService.sendOne({
+    to: phoneNumber,
+    from: process.env.SMS_SENDER,
+    text: `[송창희 서비스] 안녕하세요 요청하신 인증번호는 [${token}] 입니다.`,
+  });
+  console.log(result);
+  return result;
 }

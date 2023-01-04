@@ -4,6 +4,11 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 
 import { checkValidationPhone, getToken, sendTokenToSMS } from './phone.js';
+import {
+  checkValidationEamil,
+  getWelcomeTemplate,
+  sendTemplateToEmail,
+} from './email.js';
 import { options } from './api-docs/config.js';
 
 const app = express();
@@ -47,6 +52,19 @@ app.post('/boards', (req, res) => {
   // data 등록하는 로직
 
   res.send('success!');
+});
+
+app.post('/users', (req, res) => {
+  const user = req.body.user;
+
+  const isValid = checkValidationEamil(user.email);
+  if (isValid) {
+    const template = getWelcomeTemplate(user);
+
+    sendTemplateToEmail(user.email, template);
+    return res.send('가입 완료');
+  }
+  return res.send('이메일이 올바르지 않습니다.');
 });
 
 app.post('/tokens/phone', (req, res) => {
