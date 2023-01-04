@@ -1,6 +1,7 @@
 import express, { application } from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 import { options } from './api-docs/config.js';
 import userRouter from './routes/user.js';
@@ -10,6 +11,7 @@ const app = express();
 const swaggerSpec = swaggerJSDoc(options);
 
 app.set('port', 3000);
+app.use(cors());
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -21,5 +23,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(app.get('port'), () => {
-  console.log('hello subject');
+  console.log(`hello subject ${app.get('port')}`);
 });
