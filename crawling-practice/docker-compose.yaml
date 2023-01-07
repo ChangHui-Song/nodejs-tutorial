@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  database:
+    image: mongo:5
+    ports:
+      - 27017:27017
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: backend.Dockerfile
+    volumes:
+      - ./backend:/practice
+    ports:
+      - 4000:4000
