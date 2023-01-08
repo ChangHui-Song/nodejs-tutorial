@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/project/
+    ports:
+      - 3000:3000
+
+  database:
+    container_name: database
+    image: mongo:5
+    ports:
+      - 27017:27017
