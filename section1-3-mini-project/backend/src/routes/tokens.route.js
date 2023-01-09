@@ -4,9 +4,12 @@ import {
   checkPhone,
   getToken,
   sendTokenToSMS,
-} from '../../middlewares/tokens.middleware.js';
+} from '../middlewares/tokens.middleware.js';
 
-import { sendTokenController } from '../controllers/tokens.controller.js';
+import {
+  sendTokenController,
+  compareToken,
+} from '../controllers/tokens.controller.js';
 
 const router = express.Router();
 
@@ -17,5 +20,7 @@ router.post(
   sendTokenToSMS,
   sendTokenController
 );
+
+router.patch('/phone', compareToken);
 
 export default router;

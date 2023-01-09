@@ -19,3 +19,20 @@ export const sendTokenController = async (req, res) => {
     next(error);
   }
 };
+
+export const compareToken = async (req, res) => {
+  try {
+    const { phone, token } = req.body;
+    const exTokenInfo = await TokenModel.findOne({ phone });
+
+    if (!exTokenInfo || token !== exTokenInfo.token) {
+      return res.status(422).send('false');
+    }
+    await exTokenInfo.updateOne({ isAuth: true });
+
+    return res.send('true');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
