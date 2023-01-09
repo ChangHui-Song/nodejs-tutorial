@@ -20,11 +20,9 @@ const submitSignup = async () => {
     name: userInfo[0].value,
     personal: `${userInfo[1].value}-${userInfo[2].value}`,
     phone: userInfo[3].value + userInfo[4].value + userInfo[5].value,
-    favorite: userInfo[6].value,
+    prefer: userInfo[6].value,
     email: userInfo[7].value,
     password: userInfo[8].value,
   };
-  console.log(user);
   const result = await axios.post('http://localhost:3000/users', { user });
-  console.log(result);
 };
