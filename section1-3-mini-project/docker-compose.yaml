@@ -4,12 +4,22 @@ services:
   backend:
     container_name: backend
     build:
+      dockerfile: Dockerfile.backend
       context: ./backend
     volumes:
       - ./backend:/project/
     ports:
       - 3000:3000
 
+  crawler:
+    container_name: crawler
+    build:
+      dockerfile: Dockerfile.crawler
+      context: ./webcrawler
+    volumes:
+      - ./webcrawler:/project/
+    ports:
+      - 3001:3001
   database:
     container_name: database
     image: mongo:5
