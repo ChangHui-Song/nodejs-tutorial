@@ -6,4 +6,4 @@ const TokenSchema = mongoose.Schema({
   isAuth: Boolean,
 });
 
-export default mongoose('Token', TokenSchema);
+export default mongoose.model('Token', TokenSchema);
