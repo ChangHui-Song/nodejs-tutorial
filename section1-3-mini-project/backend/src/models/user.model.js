@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   prefer: String,
   pwd: String,
   phone: String,
+  og: Object,
 });
 
 export default mongoose.model('User', UserSchema);
