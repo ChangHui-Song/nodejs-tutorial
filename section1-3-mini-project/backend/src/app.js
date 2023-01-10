@@ -12,7 +12,7 @@ app.set('port', 3000);
 app.use(express.json());
 app.use(cors());
 
-// app.use('/user', userRouter);
+app.use('/user', userRouter);
 app.use('/tokens', tokensRouter);
 // app.use('/', menuRouter);
 
@@ -21,7 +21,7 @@ app.get('/', (_, res) => {
 });
 
 mongoose
-  .connect('mongodb://database:27017/phone')
+  .connect('mongodb://database:27017/project')
   .then(() => console.log('connected database'));
 
 app.listen(app.get('port'), async () => {
