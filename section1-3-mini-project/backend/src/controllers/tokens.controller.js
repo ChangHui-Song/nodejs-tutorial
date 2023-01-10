@@ -1,6 +1,6 @@
 import TokenModel from '../models/token.model.js';
 
-export const sendTokenController = async (req, res) => {
+export const sendTokenController = async (req, res, next) => {
   try {
     const { phone } = req.body;
     const { token } = res.locals;
@@ -20,16 +20,9 @@ export const sendTokenController = async (req, res) => {
   }
 };
 
-export const compareToken = async (req, res) => {
+export const refreshTokenController = async (_, res, next) => {
   try {
-    const { phone, token } = req.body;
-    const exTokenInfo = await TokenModel.findOne({ phone });
-
-    if (!exTokenInfo || token !== exTokenInfo.token) {
-      return res.status(422).send('false');
-    }
-    await exTokenInfo.updateOne({ isAuth: true });
-
+    await res.locals.tokenInfo.updateOne({ isAuth: true });
     return res.send('true');
   } catch (error) {
     console.error(error);
