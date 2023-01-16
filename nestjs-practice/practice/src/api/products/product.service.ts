@@ -1,6 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ProductSaleslocation } from '../productsSaleslocation/entities/productSaleslocation.entity';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -8,6 +9,8 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(ProductSaleslocation)
+    private readonly productSaleslocationRepository: Repository<ProductSaleslocation>,
   ) {}
 
   async findAll() {
@@ -21,10 +24,18 @@ export class ProductService {
   }
 
   async create({ createProductInput }) {
-    const result = await this.productRepository.save({
-      ...createProductInput,
+    const { productSaleslocation, ...product } = createProductInput;
+
+    const location = await this.productSaleslocationRepository.save({
+      ...productSaleslocation,
     });
-    return result;
+
+    const productResult = await this.productRepository.save({
+      ...product,
+      productSaleslocation: location,
+    });
+
+    return productResult;
   }
 
   update({ productId, updateProductInput }) {
