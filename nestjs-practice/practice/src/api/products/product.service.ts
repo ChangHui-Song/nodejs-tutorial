@@ -14,12 +14,15 @@ export class ProductService {
   ) {}
 
   async findAll() {
-    return await this.productRepository.find();
+    return await this.productRepository.find({
+      relations: ['productSaleslocation'],
+    });
   }
 
   async findOne(id: string) {
     return await this.productRepository.findOne({
       where: { id },
+      relations: ['productSaleslocation'],
     });
   }
 
