@@ -14,20 +14,23 @@ export class ProductService {
   ) {}
 
   async findAll() {
-    return await this.productRepository.find({
-      relations: ['productSaleslocation'],
+    const result = await this.productRepository.find({
+      relations: ['productSaleslocation', 'productCategory'],
     });
+    console.log(result);
+    return result;
   }
 
   async findOne(id: string) {
     return await this.productRepository.findOne({
       where: { id },
-      relations: ['productSaleslocation'],
+      relations: ['productSaleslocation', 'productCategory'],
     });
   }
 
   async create({ createProductInput }) {
-    const { productSaleslocation, ...product } = createProductInput;
+    const { productSaleslocation, productCategoryId, ...product } =
+      createProductInput;
 
     const location = await this.productSaleslocationRepository.save({
       ...productSaleslocation,
@@ -36,6 +39,7 @@ export class ProductService {
     const productResult = await this.productRepository.save({
       ...product,
       productSaleslocation: location,
+      productCategory: { id: productCategoryId },
     });
 
     return productResult;
