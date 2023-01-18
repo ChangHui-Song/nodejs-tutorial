@@ -54,7 +54,6 @@ export class Product {
   @Field(() => User)
   user: User;
 
-  @JoinTable()
   @ManyToMany(() => ProductTag, (productTags) => productTags.products)
   @Field(() => [ProductTag])
   productTags: ProductTag[];
