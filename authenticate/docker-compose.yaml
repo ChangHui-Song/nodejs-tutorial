@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - .:/practice/
+    ports:
+      - 3000:3000
+
+  database:
+    container_name: mysql
+    image: mysql:8.0.31
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=codecamp_database
+    ports:
+      - 3306:3306

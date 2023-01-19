@@ -1,0 +1,35 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  age: Int!
+}
+
+type Query {
+  fetchUsers: [User!]!
+  fetchUser(userId: String!): User!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+  deleteProduct(userId: String!): User!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  age: Int!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
+  age: Int
+}
