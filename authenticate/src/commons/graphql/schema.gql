@@ -10,8 +10,7 @@ type User {
 }
 
 type Query {
-  fetchUsers: [User!]!
-  fetchUser(userId: String!): User!
+  fetchUser: String!
 }
 
 type Mutation {

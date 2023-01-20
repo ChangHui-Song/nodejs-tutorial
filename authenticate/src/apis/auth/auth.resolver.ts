@@ -1,8 +1,10 @@
-import { UnprocessableEntityException } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '../users/user.service';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
 
 @Resolver()
 export class AuthResolver {
@@ -10,6 +12,13 @@ export class AuthResolver {
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => String)
+  fetchUser(@CurrentUser() currentUser: any) {
+    console.log('user: ', currentUser);
+    return 'sucess!';
+  }
 
   @Mutation(() => String)
   async login(

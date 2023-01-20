@@ -9,16 +9,6 @@ import * as bcrypt from 'bcrypt';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => [User])
-  fetchUsers() {
-    return this.userService.findAll();
-  }
-
-  @Query(() => User)
-  fetchUser(@Args('userId') id: string) {
-    return this.userService.findOneById({ id });
-  }
-
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
