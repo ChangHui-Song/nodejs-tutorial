@@ -9,8 +9,13 @@ type User {
   age: Int!
 }
 
+type AuthUser {
+  id: String!
+  email: String!
+}
+
 type Query {
-  fetchUser: String!
+  fetchUser: AuthUser!
 }
 
 type Mutation {

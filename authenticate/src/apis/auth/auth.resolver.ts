@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { AuthUser } from './entities/auth.entity';
 
 @Resolver()
 export class AuthResolver {
@@ -14,10 +15,9 @@ export class AuthResolver {
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => String)
+  @Query(() => AuthUser)
   fetchUser(@CurrentUser() currentUser: any) {
-    console.log('user: ', currentUser);
-    return 'sucess!';
+    return currentUser;
   }
 
   @Mutation(() => String)
