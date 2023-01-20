@@ -3,6 +3,7 @@ import { CreateUserInput } from './dto/createUser.input';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import * as bcrypt from 'bcrypt';
 
 @Resolver()
 export class UserResolver {
@@ -15,12 +16,16 @@ export class UserResolver {
 
   @Query(() => User)
   fetchUser(@Args('userId') id: string) {
-    return this.userService.findOne({ id });
+    return this.userService.findOneById({ id });
   }
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.userService.create(createUserInput);
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
+    return this.userService.create({
+      ...createUserInput,
+      password: hashedPassword,
+    });
   }
 
   @Mutation(() => User)
@@ -32,8 +37,6 @@ export class UserResolver {
       id: userId,
       updateUserInput,
     });
-    console.log('==================');
-    console.log('result:', result);
     return result;
   }
 

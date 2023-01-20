@@ -18,6 +18,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
   deleteProduct(userId: String!): User!
+  login(email: String!, password: String!): String!
 }
 
 input CreateUserInput {
