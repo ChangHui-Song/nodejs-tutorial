@@ -1,19 +1,18 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-export class JwtAccessStrategy extends PassportStrategy(Strategy, 'guard') {
+export class JwtAccessStratgy extends PassportStrategy(Strategy, 'guard') {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: 'AccessKey',
     });
   }
-
   validate(payload: any) {
-    console.log('payload: ', payload);
+    console.log(payload);
     return {
-      email: payload.email,
       id: payload.sub,
+      email: payload.email,
     };
   }
 }

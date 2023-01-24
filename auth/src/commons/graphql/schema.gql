@@ -9,19 +9,17 @@ type User {
   age: Int!
 }
 
-type AuthUser {
-  id: String!
-  email: String!
-}
-
 type Query {
-  fetchUser: AuthUser!
+  fetchUsers: [User!]!
+  fetchLoginUser: User!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
-  deleteProduct(userId: String!): User!
+  deleteUser(userId: String!): String!
+  updateUserPwd(password: String!): String!
+  deleteLoginUser: String!
   login(email: String!, password: String!): String!
 }
 
@@ -34,7 +32,6 @@ input CreateUserInput {
 
 input UpdateUserInput {
   email: String
-  password: String
   name: String
   age: Int
 }
