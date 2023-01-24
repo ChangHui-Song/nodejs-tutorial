@@ -17,7 +17,7 @@ export class AuthService {
       },
     );
 
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}`);
+    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
   getAccessToken({ user }) {
