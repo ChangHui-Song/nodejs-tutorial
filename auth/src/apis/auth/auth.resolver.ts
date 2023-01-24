@@ -1,5 +1,5 @@
 import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import * as bcrypt from 'bcrypt';
@@ -46,16 +46,19 @@ export class AuthResolver {
   async login(
     @Args('email') email: string, //
     @Args('password') password: string,
+    @Context() context: any,
   ) {
     const exUser = await this.userService.findOneByEmail({ email });
 
     if (!exUser)
       throw new UnprocessableEntityException('이메일이 존재하지 않습니다.');
-    console.log(password, exUser.password);
+
     const isAuth = await bcrypt.compare(password, exUser.password);
 
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호가 일치하지 않습니다.');
+
+    this.authService.setRefreshToken({ user: exUser, res: context.req.res });
 
     return this.authService.getAccessToken({ user: exUser });
   }

@@ -14,6 +14,7 @@ import { UserModule } from './apis/user/user.module';
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }),
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
