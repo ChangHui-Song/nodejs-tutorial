@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStratgy } from 'src/commons/auth/jwt-access.strategy';
+import { JwtRefreshStratgy } from 'src/commons/auth/jwt-refresh.strategy';
 
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
@@ -13,6 +14,12 @@ import { AuthService } from './auth.service';
     TypeOrmModule.forFeature([User]), //
     JwtModule.register({}),
   ],
-  providers: [AuthResolver, AuthService, UserService, JwtAccessStratgy],
+  providers: [
+    AuthResolver,
+    AuthService,
+    UserService,
+    JwtAccessStratgy,
+    JwtRefreshStratgy,
+  ],
 })
 export class AuthModule {}

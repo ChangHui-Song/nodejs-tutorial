@@ -21,6 +21,7 @@ type Mutation {
   updateUserPwd(password: String!): String!
   deleteLoginUser: String!
   login(email: String!, password: String!): String!
+  restoreAccessToken: String!
 }
 
 input CreateUserInput {

@@ -28,7 +28,7 @@ export class AuthService {
       },
       {
         secret: 'AccessKey',
-        expiresIn: '1h',
+        expiresIn: '15s',
       },
     );
   }
