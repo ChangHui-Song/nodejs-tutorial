@@ -15,15 +15,40 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
+
   @Get('/login/google')
   @UseGuards(AuthGuard('google'))
-  loginGoogle(
+  async loginGoogle(
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    let user = this.userService.findOneByEmail({ email: '' });
+    let user = await this.userService.findOneByEmail({ email: req.user.email });
     if (!user) {
-      user = this.userService.create({
+      user = await this.userService.create({
+        email: req.user.email,
+        password: req.user.password,
+        name: req.user.name,
+        age: req.user.age,
+      });
+    }
+
+    this.authService.setRefreshToken({ user, res });
+    res.redirect('http://localhost:5500/frontend/social-login.html');
+  }
+
+  @Get('/login/naver')
+  @UseGuards(AuthGuard('naver'))
+  async loginNaver(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    console.log('test');
+    console.log(req.user);
+    let user = await this.userService.findOneByEmail({ email: req.user.email });
+    console.log('=================user');
+    console.log(user);
+    if (!user) {
+      user = await this.userService.create({
         email: req.user.email,
         password: req.user.password,
         name: req.user.name,

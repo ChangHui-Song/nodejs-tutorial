@@ -1,13 +1,12 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-oauth20';
+import { Strategy } from 'passport-naver';
 
-export class JwtGoogleStratgy extends PassportStrategy(Strategy, 'google') {
+export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   constructor() {
     super({
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      scope: ['email', 'profile'],
+      clientID: process.env.NAVER_CLIENT_ID,
+      clientSecret: process.env.NAVER_CLIENT_SECRET,
+      callbackURL: process.env.NAVER_CALLBACK_URL,
     });
   }
 
@@ -20,9 +19,9 @@ export class JwtGoogleStratgy extends PassportStrategy(Strategy, 'google') {
     console.log(profile);
 
     return {
-      email: profile.emails[0].value,
-      password: 'abcde',
-      name: profile.displayName,
+      email: profile._json.email,
+      password: 'undefined',
+      name: profile._json.nickname,
       age: 0,
     };
   }

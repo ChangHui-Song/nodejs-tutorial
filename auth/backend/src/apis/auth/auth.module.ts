@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStratgy } from 'src/commons/auth/jwt-access.strategy';
 import { JwtRefreshStratgy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStratgy } from 'src/commons/auth/jwt-social-google.strategy';
+import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
@@ -23,6 +24,7 @@ import { AuthService } from './auth.service';
     JwtAccessStratgy,
     JwtRefreshStratgy,
     JwtGoogleStratgy,
+    JwtNaverStrategy,
   ],
   controllers: [
     AuthController, //
