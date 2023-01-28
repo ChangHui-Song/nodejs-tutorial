@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import axios from 'axios';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -45,5 +46,15 @@ export class AuthService {
     }
     this.setRefreshToken({ user, res });
     res.redirect('http://localhost:5500/frontend/social-login.html');
+  }
+
+  async getImpAccessToken() {
+    const result = await axios.post('https://api.iamport.kr/users/getToken', {
+      imp_key: process.env.IMP_KEY,
+      imp_secret: process.env.IMP_SECRET,
+    });
+    console.log();
+
+    return result.data.response['access_token'];
   }
 }
