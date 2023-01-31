@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import {
@@ -15,6 +16,21 @@ export class PointTransactionService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
+
+  async compareImpUid({ impAccessToken, impUid }) {
+    try {
+      const getPaymentData = await axios({
+        url: `https://api.iamport.kr/payments/${impUid}`, // imp_uid 전달
+        method: 'get', // GET method
+        headers: { Authorization: impAccessToken }, // 인증 토큰 Authorization header에 추가
+      });
+      const paymentData = getPaymentData.data.response;
+      console.log(paymentData);
+      return false;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   async create({ impUid, amount, currentUser }) {
     const pointTransaction = this.pointTransactionRepository.create({
@@ -37,7 +53,14 @@ export class PointTransactionService {
         point: user.point + amount,
       },
     );
-    console.log(pointTransaction);
     return pointTransaction;
+  }
+
+  async checkDuplicate({ impUid }) {
+    const exImpUid = await this.pointTransactionRepository.findOne({
+      where: { impUid },
+    });
+
+    if (exImpUid) throw new ConflictException('이미 결제 된 아이디입니다.');
   }
 }
