@@ -35,4 +35,27 @@ export class PointTransactionResolver {
       currentUser,
     });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => PointTransaction)
+  async cancelPointTransaction(
+    @Args('impUid') impUid: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    await this.pointTransactionService.checkAlreadyCanceled({ impUid });
+    await this.pointTransactionService.checkHasCancelablePoint({
+      impUid,
+      currentUser,
+    });
+    const token = await this.importService.getImpAccessToken();
+    const canceledAmount = this.importService.cancel({
+      impUid,
+      token,
+    });
+    await this.pointTransactionService.cancel({
+      impUid,
+      amount: canceledAmount,
+      currentUser,
+    });
+  }
 }

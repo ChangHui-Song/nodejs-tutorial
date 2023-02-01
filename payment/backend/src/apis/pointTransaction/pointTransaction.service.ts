@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
@@ -32,12 +36,17 @@ export class PointTransactionService {
     }
   }
 
-  async create({ impUid, amount, currentUser }) {
+  async create({
+    impUid,
+    amount,
+    currentUser,
+    status = POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+  }) {
     const pointTransaction = this.pointTransactionRepository.create({
       impUid,
       amount,
       user: currentUser,
-      status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+      status,
     });
     await this.pointTransactionRepository.save(pointTransaction);
 
@@ -56,11 +65,53 @@ export class PointTransactionService {
     return pointTransaction;
   }
 
+  async cancel({ impUid, amount, currentUser }) {
+    return await this.create({
+      impUid,
+      amount: -amount,
+      currentUser,
+      status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
+    });
+  }
+
   async checkDuplicate({ impUid }) {
     const exImpUid = await this.pointTransactionRepository.findOne({
       where: { impUid },
     });
 
     if (exImpUid) throw new ConflictException('이미 결제 된 아이디입니다.');
+  }
+
+  async checkAlreadyCanceled({ impUid }) {
+    const user = await this.pointTransactionRepository.findOne({
+      where: {
+        impUid,
+        status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
+      },
+    });
+    if (user) {
+      throw new ConflictException('이미 취소된 결제 내역입니다.');
+    }
+  }
+
+  async checkHasCancelablePoint({ impUid, currentUser }) {
+    const pointTransaction = await this.pointTransactionRepository.findOne({
+      where: {
+        impUid,
+        user: { id: currentUser.id },
+        status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+      },
+    });
+
+    if (!pointTransaction) {
+      throw new UnprocessableEntityException('결제 기록이 존재하지 않습니다.');
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { id: currentUser.id },
+    });
+    if (user.point < pointTransaction.amount) {
+      throw new UnprocessableEntityException('포인트가 부족합니다.');
+    }
   }
 }

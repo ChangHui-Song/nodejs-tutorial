@@ -4,18 +4,10 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class ImportService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>, //
-  ) {}
-
   async getImpAccessToken() {
     try {
       const result = await axios.post('https://api.iamport.kr/users/getToken', {
@@ -47,6 +39,7 @@ export class ImportService {
       if (result.data.response.amount !== amount) {
         throw new UnprocessableEntityException('결제 금액이 잘못되었습니다.');
       }
+
       return result;
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -58,5 +51,23 @@ export class ImportService {
         throw error;
       }
     }
+  }
+
+  async cancel({ impUid, token }) {
+    try {
+      const result = await axios.post(
+        'https://api.import.kr/payments/cancel',
+        {
+          imp_uid: impUid,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        },
+      );
+
+      return result.data.response.cancel_amount;
+    } catch (error) {}
   }
 }
