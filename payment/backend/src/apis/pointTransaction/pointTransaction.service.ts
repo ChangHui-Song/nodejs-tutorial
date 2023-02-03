@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import {
   PointTransaction,
@@ -19,6 +19,8 @@ export class PointTransactionService {
     private readonly pointTransactionRepository: Repository<PointTransaction>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly connection: Connection,
   ) {}
 
   async compareImpUid({ impAccessToken, impUid }) {
@@ -42,27 +44,49 @@ export class PointTransactionService {
     currentUser,
     status = POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
   }) {
-    const pointTransaction = this.pointTransactionRepository.create({
-      impUid,
-      amount,
-      user: currentUser,
-      status,
-    });
-    await this.pointTransactionRepository.save(pointTransaction);
+    const queryRunner = await this.connection.createQueryRunner();
+    await queryRunner.connect();
 
-    const user = await this.userRepository.findOne({
-      where: { id: currentUser.id },
-    });
+    // query transaction
+    try {
+      const pointTransaction = this.pointTransactionRepository.create({
+        impUid,
+        amount,
+        user: currentUser,
+        status,
+      });
+      // await this.pointTransactionRepository.save(pointTransaction);
+      await queryRunner.manager.save(pointTransaction);
 
-    await this.userRepository.update(
-      {
-        id: user.id,
-      },
-      {
+      throw new Error('custom error');
+
+      const user = await this.userRepository.findOne({
+        where: { id: currentUser.id },
+      });
+
+      // await this.userRepository.update(
+      //   {
+      //     id: user.id,
+      //   },
+      //   {
+      //     point: user.point + amount,
+      //   },
+      // );
+
+      const updatedUser = this.userRepository.create({
+        ...user,
         point: user.point + amount,
-      },
-    );
-    return pointTransaction;
+      });
+      await queryRunner.manager.save(updatedUser);
+
+      await queryRunner.commitTransaction();
+
+      return pointTransaction;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async cancel({ impUid, amount, currentUser }) {
