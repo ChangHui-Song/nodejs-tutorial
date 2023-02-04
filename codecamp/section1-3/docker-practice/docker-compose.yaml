@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  backend-practice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/practice/src
+    ports:
+      - 3000:3000
+
+  database-practice:
+    image: mongo:5
+    ports:
+      - 27017:27017

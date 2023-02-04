@@ -1,0 +1,20 @@
+/starbucks:
+  get:
+    tags: [Coffee]
+    summary: 커피 데이터 가져오기
+    description: coffee data
+    responses:
+      '200':
+        description: coffee list
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  name:
+                    type: string
+                    example: '아메리카노'
+                  kcal:
+                    type: int
+                    example: 5

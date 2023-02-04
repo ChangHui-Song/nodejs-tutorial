@@ -1,0 +1,70 @@
+components:
+  schemas:
+    Phone:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: 01012345678
+    Token:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: 01012345678
+        token:
+          type: string
+          example: 123456
+
+/tokens/phone:
+  post:
+    tag: [Phone]
+    summary: 유저의 휴대폰으로 SMS 인증 메세지 전송
+    requestBody:
+      require: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Phone'
+    responses:
+      '200':
+        description: 성공
+        content:
+          text/plain:
+            type: string
+            example: 01012345678로 메세지 전송이 완료되었습니다.
+      '403':
+        description: 휴대폰 번호가 양식에 맞지 않음
+        content:
+          text/plain:
+            type: string
+            example: 휴대폰 번호가 양식에 맞지 않습니다.
+      '500':
+        description: 모든 요청이 정상이나 문자 보내기에 실패
+        text/plain:
+          content:
+            type: string
+            example: 메세지 발송에 실패했습니다.
+
+  patch:
+    tag: [Phone]
+    summary: 유저가 입력한 인증 번호와 전송된 인증 번호를 비교
+    requestBody:
+      require: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Token'
+    responses:
+      '200':
+        description: 성공
+        content:
+          text/plain:
+            type: string
+            example: true
+      '404':
+        description: 토큰이 일치하지 않는 경우
+        content:
+          text/plain:
+            type: string
+            example: false
