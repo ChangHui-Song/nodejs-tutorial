@@ -45,14 +45,17 @@
                 {
                   query: `
                     mutation {
-                      createPointTransaction(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount})
+                      createPointTransaction(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}){
+                      id
+                      amount
+                      status
                     }
-                `,
+                  }`,
                 },
                 {
                   headers: {
                     Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNjaDEwMjQwM0BnbWFpbC5jb20iLCJzdWIiOiJiNGI4N2ZmNS1iMmFjLTQ3OTYtYmU3Zi04MzhiYWZiMGFiZWEiLCJpYXQiOjE2NzUxNjE2NzQsImV4cCI6MTY3NTE2NTI3NH0.i3h40CCOHSanJkQNm2wY5OdNMW1QU3RrDLqbu3dlm4I",
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYUBhYWEuY29tIiwic3ViIjoiZjExMGI2OTUtZWFkYy00MGE0LWI5MGYtN2QwNWE5MDM1ZTM0IiwiaWF0IjoxNjc1NDkxNjE3LCJleHAiOjE2NzU0OTUyMTd9.9iSGdSw1rxT6xBm8rPZJD_cDVNMDjt0Nr70VKsfsmhY",
                   },
                 }
               );

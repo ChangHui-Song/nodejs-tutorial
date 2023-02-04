@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import {
   PointTransaction,
@@ -20,7 +20,7 @@ export class PointTransactionService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
-    private readonly connection: Connection,
+    private readonly dataSource: DataSource,
   ) {}
 
   async compareImpUid({ impAccessToken, impUid }) {
@@ -44,8 +44,9 @@ export class PointTransactionService {
     currentUser,
     status = POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
   }) {
-    const queryRunner = await this.connection.createQueryRunner();
+    const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     // query transaction
     try {
@@ -57,8 +58,6 @@ export class PointTransactionService {
       });
       // await this.pointTransactionRepository.save(pointTransaction);
       await queryRunner.manager.save(pointTransaction);
-
-      throw new Error('custom error');
 
       const user = await this.userRepository.findOne({
         where: { id: currentUser.id },
