@@ -46,7 +46,7 @@ export class PointTransactionService {
   }) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await queryRunner.startTransaction('SERIALIZABLE');
 
     // query transaction
     try {
@@ -59,8 +59,13 @@ export class PointTransactionService {
       // await this.pointTransactionRepository.save(pointTransaction);
       await queryRunner.manager.save(pointTransaction);
 
-      const user = await this.userRepository.findOne({
+      // const user = await this.userRepository.findOne({
+      //   where: { id: currentUser.id },
+      // });
+
+      const user = await queryRunner.manager.findOne(User, {
         where: { id: currentUser.id },
+        lock: { mode: 'pessimistic_write' },
       });
 
       // await this.userRepository.update(

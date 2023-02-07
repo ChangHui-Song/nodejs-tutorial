@@ -20,8 +20,6 @@ export class PointTransactionResolver {
     @Args('amount') amount: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
-    console.log('test');
-    console.log(impUid, amount);
     const impAccessToken = await this.importService.getImpAccessToken();
     await this.importService.checkPaid({
       impAccessToken,
