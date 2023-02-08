@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
+import { v4 as uuidv4 } from 'uuid';
+
+import { getToday } from 'src/commons/libs/utils';
 
 @Injectable()
 export class FileService {
@@ -13,12 +16,11 @@ export class FileService {
 
     const promisedFiles = waitedFiles.map((file) => {
       return new Promise((resolve, reject) => {
+        const fname = `${getToday()}/${uuidv4()}/origin/${file.filename}`;
         file
           .createReadStream()
-          .pipe(storage.file(file.filename).createWriteStream())
-          .on('finish', () =>
-            resolve(`${process.env.GOOGLE_BUCKET}/${file.filename}`),
-          )
+          .pipe(storage.file(fname).createWriteStream())
+          .on('finish', () => resolve(`${process.env.GOOGLE_BUCKET}/${fname}`))
           .on('error', () => reject('fail'));
       });
     });
