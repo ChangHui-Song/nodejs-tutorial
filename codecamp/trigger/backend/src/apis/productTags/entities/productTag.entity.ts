@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Product } from 'src/api/products/entities/product.entity';
+import { Product } from 'src/apis/products/entities/product.entity';
 import {
   Column,
   Entity,

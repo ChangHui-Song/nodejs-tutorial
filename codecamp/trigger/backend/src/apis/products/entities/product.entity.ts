@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ProductCategory } from 'src/api/productCategory/entities/productCategory.entity';
-import { ProductSaleslocation } from 'src/api/productsSaleslocation/entities/productSaleslocation.entity';
-import { ProductTag } from 'src/api/productTags/entities/productTag.entity';
-import { User } from 'src/api/users/entities/user.entity';
+import { ProductCategory } from 'src/apis/productCategory/entities/productCategory.entity';
+import { ProductSaleslocation } from 'src/apis/productsSaleslocation/entities/productSaleslocation.entity';
+import { ProductTag } from 'src/apis/productTags/entities/productTag.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   DeleteDateColumn,

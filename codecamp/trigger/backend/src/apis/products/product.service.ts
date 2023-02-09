@@ -45,7 +45,7 @@ export class ProductService {
       const tagname = productTags[i].replace('#', '');
 
       const prevTag = await this.productTagRepository.findOne({
-        name: tagname,
+        where: { name: tagname },
       });
 
       if (prevTag) {
