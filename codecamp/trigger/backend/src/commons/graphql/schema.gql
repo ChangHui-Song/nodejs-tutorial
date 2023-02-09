@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  email: String!
+  name: String!
+  age: Int!
+}
+
 type ProductSaleslocation {
   id: String!
   address: String!
@@ -19,13 +26,6 @@ scalar DateTime
 type ProductCategory {
   id: String!
   name: String!
-}
-
-type User {
-  id: String!
-  email: String!
-  name: String!
-  age: Int!
 }
 
 type Product {
@@ -59,6 +59,7 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
+  createProductCategory(name: String!): ProductCategory!
 }
 
 input CreateUserInput {

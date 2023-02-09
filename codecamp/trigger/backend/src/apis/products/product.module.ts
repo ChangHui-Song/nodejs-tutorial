@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductSaleslocation } from '../productsSaleslocation/entities/productSaleslocation.entity';
 import { ProductTag } from '../productTags/entities/productTag.entity';
 import { Product } from './entities/product.entity';
+import { ProductSubscriber } from './entities/product.subscriber';
 import { ProductResolver } from './product.resolver';
 import { ProductService } from './product.service';
 
@@ -10,6 +11,10 @@ import { ProductService } from './product.service';
   imports: [
     TypeOrmModule.forFeature([Product, ProductSaleslocation, ProductTag]),
   ],
-  providers: [ProductResolver, ProductService],
+  providers: [
+    ProductResolver, //
+    ProductService,
+    ProductSubscriber,
+  ],
 })
 export class ProductModule {}
