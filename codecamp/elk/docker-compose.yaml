@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  # backend server configure
+  backend:
+    container_name: backend
+
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    volumes:
+      - .:/practice/
+      - /practice/node_modules/
+    
+    ports:
+      - 3000:3000
+
+  # mysql server configure
+  database:
+    container_name: mysql
+
+    image: mysql:8.0.31
+    restart: always
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=codecamp
+    
+    ports:
+      - 3306:3306
+
+  # redis server configure
+  redis:
+    container_name: redis
+
+    image: redis:latest
+
+    ports:
+      - 6379:6379
+
+  # elasticksearch server configure
+  elasticksearch:
+    container_name: elk
+
+    image: elasticksearch:7.17.0

@@ -1,0 +1,58 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  age: Int!
+}
+
+type Board {
+  id: String!
+  title: String!
+  contents: String!
+  user: User!
+}
+
+type Query {
+  fetchUsers: [User!]!
+  fetchBoards: [Board!]!
+  fetchBoard(boardId: String!): Board!
+  fetchBoardsCount: Int!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+  deleteUser(userId: String!): String!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
+  deleteBoard(id: String!): String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  age: Int!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  age: Int
+}
+
+input CreateBoardInput {
+  writer: String!
+  title: String!
+  contents: String!
+}
+
+input UpdateBoardInput {
+  writer: String
+  title: String
+  contents: String
+}
