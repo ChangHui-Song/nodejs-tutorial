@@ -40,13 +40,22 @@ services:
       - 6379:6379
 
   # elasticksearch server configure
-  elasticksearch:
-    container_name: elasticksearch
+  elasticsearch:
+    container_name: elasticsearch
 
-    image: elasticksearch:7.17.0
+    image: elasticsearch:7.17.0
 
     environment:
       discovery.type: single-node
     
     ports:
       - 9200:9200
+
+  logstash:
+    container_name: logstash
+
+    volumes:
+      - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./elk/logstash/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar
+
+    image: logstash:7.17.0
