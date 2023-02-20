@@ -41,6 +41,12 @@ services:
 
   # elasticksearch server configure
   elasticksearch:
-    container_name: elk
+    container_name: elasticksearch
 
     image: elasticksearch:7.17.0
+
+    environment:
+      discovery.type: single-node
+    
+    ports:
+      - 9200:9200
