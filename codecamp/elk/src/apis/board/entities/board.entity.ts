@@ -7,6 +7,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -24,11 +25,12 @@ export class Board {
   @Field(() => String)
   contents: string;
 
-  @Column()
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
+  updatedAt: Date;
+
   @DeleteDateColumn()
   deletedAt: Date;
 

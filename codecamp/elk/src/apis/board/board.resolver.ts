@@ -45,16 +45,16 @@ export class BoardResolver {
     @Args('createBoardInput') createBoardInput: CreateBoardInput,
   ) {
     //elasticsearch practice
-    const result = await this.elasticsearchService.create({
-      id: 'myid',
-      index: 'board',
-      document: {
-        ...createBoardInput,
-      },
-    });
+    // const result = await this.elasticsearchService.create({
+    //   id: 'myid',
+    //   index: 'board',
+    //   document: {
+    //     ...createBoardInput,
+    //   },
+    // });
 
-    return result;
-    // return this.boardService.create({ createBoardInput });
+    // return result;
+    return this.boardService.create({ createBoardInput });
   }
 
   @Mutation(() => Board)
