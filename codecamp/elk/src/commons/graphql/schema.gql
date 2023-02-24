@@ -18,7 +18,7 @@ type Board {
 
 type Query {
   fetchUsers: [User!]!
-  fetchBoards: [Board!]!
+  fetchBoards(search: String): [Board!]!
   fetchBoard(boardId: String!): Board!
   fetchBoardsCount: Int!
 }

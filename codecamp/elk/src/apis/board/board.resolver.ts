@@ -13,13 +13,17 @@ export class BoardResolver {
   ) {}
 
   @Query(() => [Board])
-  async fetchBoards() {
+  async fetchBoards(
+    @Args({ name: 'search', nullable: true }) search: string, //
+  ) {
     // elasticsearch practice
     console.log('test');
     const result = await this.elasticsearchService.search({
-      index: 'board',
+      index: 'practice01',
       query: {
-        match_all: {},
+        match: {
+          contents: search,
+        },
       },
     });
 
