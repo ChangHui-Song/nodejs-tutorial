@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  # gateway configure
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway/
+      dockerfile: Dockerfile
+    volumes:
+      - ./api-gateway/src:/api-gateway/src
+    ports:
+      - 3000:3000
+
+  # auth configure
+  auth:
+    container_name: auth
+    build:
+      context: ./services/auth/
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/auth/src:/auth/src
+  
+  # resource configure
+  resource:
+    container_name: resource
+    build:
+      context: ./services/resource/
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/resource/src:/resource/src
