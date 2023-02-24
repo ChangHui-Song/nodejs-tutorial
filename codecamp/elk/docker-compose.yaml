@@ -31,13 +31,13 @@ services:
       - 3306:3306
 
   # redis server configure
-  # redis:
-  #   container_name: redis
+  redis:
+    container_name: redis
 
-  #   image: redis:latest
+    image: redis:latest
 
-  #   ports:
-  #     - 6379:6379
+    ports:
+      - 6379:6379
 
   # elasticksearch server configure
   elasticsearch:
@@ -51,11 +51,12 @@ services:
     ports:
       - 9200:9200
 
-  # logstash:
-  #   container_name: logstash
+  # logstash configure
+  logstash:
+    container_name: logstash
 
-  #   volumes:
-  #     - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-  #     - ./elk/logstash/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar
+    volumes:
+      - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./elk/logstash/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar
 
-  #   image: logstash:7.17.0
+    image: logstash:7.17.0

@@ -1,5 +1,8 @@
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CACHE_MANAGER, Inject } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+
 import { BoardService } from './board.service';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
@@ -10,24 +13,35 @@ export class BoardResolver {
   constructor(
     private readonly boardService: BoardService,
     private readonly elasticsearchService: ElasticsearchService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   @Query(() => [Board])
   async fetchBoards(
-    @Args({ name: 'search', nullable: true }) search: string, //
+    @Args('search') search: string, //
   ) {
+    // redis search
+    const boardsCache = await this.cacheManager.get(`boards:${search}`);
+    if (boardsCache) return boardsCache;
+
     // elasticsearch practice
-    console.log('test');
     const result = await this.elasticsearchService.search({
       index: 'practice01',
-      query: {
-        match: {
-          contents: search,
-        },
-      },
+      query: { match: { title: search } },
     });
 
-    console.log(JSON.stringify(result, null, ' '));
+    // result parsing
+    const boards = result.hits.hits.map((el: any) => ({
+      id: el._source.id,
+      title: el._source.title,
+      contents: el._source.contents,
+    }));
+
+    // redis cache set
+    this.cacheManager.set(`boards:${search}`, boards, { ttl: 0 });
+
+    return boards;
 
     // return this.boardService.findAll();
   }
