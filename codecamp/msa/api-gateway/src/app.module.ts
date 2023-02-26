@@ -1,28 +1,23 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
+import { IntrospectAndCompose } from '@apollo/gateway';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'AUTH',
-        transport: Transport.TCP,
-        options: {
-          host: 'auth',
-          port: 3001,
-        },
+    GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
+      driver: ApolloGatewayDriver,
+      gateway: {
+        supergraphSdl: new IntrospectAndCompose({
+          subgraphs: [
+            { name: 'auth', url: 'http://auth:3001/graphql' },
+            { name: 'resource', url: 'http://resource:3002/graphql' },
+          ],
+        }),
       },
-      {
-        name: 'RESOURCE',
-        transport: Transport.TCP,
-        options: {
-          host: 'resource',
-          port: 3002,
-        },
-      },
-    ]),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
