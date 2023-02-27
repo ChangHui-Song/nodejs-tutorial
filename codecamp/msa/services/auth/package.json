@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@apollo/federation": "^0.38.1",
-    "@apollo/subgraph": "^2.3.2",
+    "@apollo/subgraph": "2.2.2",
     "@nestjs/apollo": "^10.2.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",

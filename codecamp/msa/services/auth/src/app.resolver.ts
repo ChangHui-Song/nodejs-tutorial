@@ -1,9 +1,14 @@
 import { AppService } from './app.service';
-import { Mutation, Resolver } from '@nestjs/graphql';
+import { Mutation, Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
 export class AppResolver {
   constructor(private readonly appService: AppService) {}
+
+  @Query(() => String)
+  fetchUser() {
+    return 'fetch user data';
+  }
 
   @Mutation(() => String)
   login() {

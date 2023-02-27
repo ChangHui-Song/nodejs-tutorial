@@ -1,11 +1,11 @@
 FROM node:18
 
-WORKDIR /api-gateway/
+WORKDIR /stock/
 COPY ./package.json .
 COPY ./yarn.lock .
 
 RUN yarn install
 
-COPY . /api-gateway/
+COPY . /stock/
 
 CMD yarn start:dev
