@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -17,24 +17,25 @@ export class UserService {
   }
 
   async findOneById({ id }) {
-    console.log('ididid', id);
     return this.userRepository.findOne({
       where: { id },
     });
   }
 
   async findOneByEmail({ email }) {
-    return this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { email },
     });
   }
 
   async create({ email, password, name, age }) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await this.findOneByEmail({ email });
+
+    if (user) throw new ConflictException('already registed email');
 
     return this.userRepository.save({
       email,
-      password: hashedPassword,
+      password,
       name,
       age,
     });
