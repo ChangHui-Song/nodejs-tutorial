@@ -1,6 +1,7 @@
 import { ConflictException } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { UserService } from '../user.service';
 
@@ -19,11 +20,14 @@ class MockUserRepository {
   }
 }
 
+type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
+
 describe('UserService', () => {
   let userService: UserService;
+  let userRepository: MockRepository<User>;
 
   beforeEach(async () => {
-    const userModule = await Test.createTestingModule({
+    const userModule: TestingModule = await Test.createTestingModule({
       providers: [
         UserService, //
         {
@@ -34,10 +38,16 @@ describe('UserService', () => {
     }).compile();
 
     userService = userModule.get<UserService>(UserService);
+    userRepository = userModule.get<MockRepository<User>>(
+      getRepositoryToken(User),
+    );
   });
 
   describe('create', () => {
     test('email 검증', async () => {
+      const userRepositorySpyOfFindOne = jest.spyOn(userRepository, 'findOne');
+      const userRepositorySpyOfSave = jest.spyOn(userRepository, 'save');
+
       const dummyData = {
         email: 'a@a.com',
         password: '1234',
@@ -50,9 +60,15 @@ describe('UserService', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(ConflictException);
       }
+
+      expect(userRepositorySpyOfFindOne).toBeCalledTimes(1);
+      expect(userRepositorySpyOfSave).toBeCalledTimes(0);
     });
 
     test('회원 등록 test', async () => {
+      const userRepositorySpyOfFindOne = jest.spyOn(userRepository, 'findOne');
+      const userRepositorySpyOfSave = jest.spyOn(userRepository, 'save');
+
       const dummyData = {
         email: 'b@b.com',
         password: '1234',
@@ -69,6 +85,8 @@ describe('UserService', () => {
 
       const result = await userService.create({ ...dummyData });
       expect(result).toStrictEqual(expectedData);
+      expect(userRepositorySpyOfFindOne).toBeCalledTimes(1);
+      expect(userRepositorySpyOfSave).toBeCalledTimes(1);
     });
   });
 });
