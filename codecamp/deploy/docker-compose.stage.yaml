@@ -6,12 +6,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./src:/practice/src
+    # volumes:
+    #   - ./src:/practice/src
     ports:
       - 3000:3000
     env_file:
-      - ./.env
+      - ./.env.stage
     depends_on:
       - mysql
     
