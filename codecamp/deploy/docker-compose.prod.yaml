@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   backend:
+    image: asia.gcr.io/onyx-ivy-377204/backend:0.6
     container_name: backend
     build:
       context: .
@@ -12,7 +13,7 @@ services:
       - 3000:3000
     env_file:
       - ./.env.prod
-    
+
   # mysql:
   #   container_name: mysql
   #   platform: linux/x86_64
