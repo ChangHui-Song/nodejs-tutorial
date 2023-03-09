@@ -13,13 +13,13 @@ steps:
       - codecamp/deploy/docker-compose.prod.yaml
       - push
 
-  # kubectl set image deployment/backend backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.12
+  # kubectl set image deployment/backend backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.13
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
       - image
       - deployment/backend
-      - backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.12
+      - backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.13
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
