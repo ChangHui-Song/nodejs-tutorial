@@ -1,13 +1,13 @@
 steps:
   # docker-compose -f docker-compose.prod.yaml build
-  - name: docker/compose:latest
+  - name: docker/compose:1.29.0
     args:
       - -f
       - codecamp/deploy/docker-compose.prod.yaml
       - build
 
   # docker-compose -f docker-compose.prod.yaml push
-  - name: docker/compose:latest
+  - name: docker/compose:1.29.0
     args:
       - -f
       - codecamp/deploy/docker-compose.prod.yaml
