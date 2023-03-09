@@ -1,0 +1,25 @@
+steps:
+  # docker-compose -f docker-compose.prod.yaml build
+  - name: docker/compose:latest
+    args:
+      - -f
+      - codecamp/deploy/docker-compose.prod.yaml
+      - build
+
+  # docker-compose -f docker-compose.prod.yaml push
+  - name: docker/compose:latest
+    args:
+      - -f
+      - codecamp/deploy/docker-compose.prod.yaml
+      - push
+
+  # kubectl set image deployment/backend backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.9
+  - name: gcr.io/colud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/backend
+      - backend-sha256-1=asia.gcr.io/onyx-ivy-377204/backend:0.9
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
